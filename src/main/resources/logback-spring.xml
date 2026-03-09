@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- CloudWatch Appender -->
+    <appender name="CLOUDWATCH" class="com.parcial.ordenes.config.CloudWatchLogAppender">
+        <logGroupName>ordenes-log-group</logGroupName>
+        <region>us-east-1</region>
+    </appender>
+
+    <!-- Root Logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="CLOUDWATCH"/>
+    </root>
+
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="com.parcial.ordenes" level="DEBUG"/>
+</configuration>
