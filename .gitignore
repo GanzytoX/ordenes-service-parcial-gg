@@ -1,20 +1,51 @@
-HELP.md
+# ── Maven ────────────────────────────────────────────────────
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+*.jar
+*.war
+*.ear
+*.class
 
-### Credenciales ###
+# ── Spring Boot ──────────────────────────────────────────────
+HELP.md
+spring-shell.log
+
+# ── Credenciales / Entorno ───────────────────────────────────
 .env
+*.env
+!.env.example
 
-### IntelliJ IDEA ###
-.idea
+# ── IDEs ─────────────────────────────────────────────────────
+# IntelliJ IDEA
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### VS Code ###
+# VS Code
 .vscode/
 
-### Mac ###
+# Eclipse
+.eclipse/
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbproject/private/
+build/
+nbdist/
+.nb-gradle/
+
+# ── OS ───────────────────────────────────────────────────────
 .DS_Store
+Thumbs.db
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Docker ───────────────────────────────────────────────────
+docker-compose.override.yml
