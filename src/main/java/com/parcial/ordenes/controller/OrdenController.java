@@ -22,9 +22,14 @@ public class OrdenController {
     // POST /ordenes
     @PostMapping
     public ResponseEntity<Orden> createOrden(@RequestBody Orden orden) {
-        log.info("POST /ordenes - usuarioId: {}", orden.getUsuarioId());
-        Orden created = ordenService.createOrden(orden);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        try {
+            log.info("POST /ordenes - usuarioId: {}", orden.getUsuarioId());
+            Orden created = ordenService.createOrden(orden);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (Exception e) {
+            log.error("Error en POST /ordenes - enviando al tópico: {}", orden, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // GET /ordenes/{id}
