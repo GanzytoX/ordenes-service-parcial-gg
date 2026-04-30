@@ -1,4 +1,4 @@
-package com.parcial.ordenes.config;
+package com.midterm.orders.config;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
@@ -20,8 +20,8 @@ import java.util.UUID;
  */
 public class CloudWatchLogAppender extends AppenderBase<ILoggingEvent> {
 
-    private String logGroupName = "ordenes-log-group";
-    private String logStreamName = "ordenes-stream-" + UUID.randomUUID().toString().substring(0, 8);
+    private String logGroupName = "orders-log-group";
+    private String logStreamName = "orders-stream-" + UUID.randomUUID().toString().substring(0, 8);
     private String region = "us-east-1";
     private String endpoint;
 

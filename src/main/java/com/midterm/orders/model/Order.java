@@ -1,4 +1,4 @@
-package com.parcial.ordenes.model;
+package com.midterm.orders.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,23 +9,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document(collection = "ordenes")
+@Document(collection = "orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Orden {
+public class Order {
 
     @Id
     private String id;
 
-    private String usuarioId;
+    private String userId;
 
     private List<ItemOrden> items;
 
     private Double total;
 
-    /** Estados posibles: PENDIENTE, PROCESADA, CANCELADA */
-    private String status = "PENDIENTE";
+    /** Estados posibles: PENDING, PROCESADA, CANCELADA */
+    private String status = "PENDING";
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -36,8 +36,8 @@ public class Orden {
     @AllArgsConstructor
     public static class ItemOrden {
         private String productoId;
-        private String nombre;
+        private String name;
         private Integer cantidad;
-        private Double precio;
+        private Double price;
     }
 }

@@ -4,8 +4,8 @@
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <!-- CloudWatch Appender -->
-    <appender name="CLOUDWATCH" class="com.parcial.ordenes.config.CloudWatchLogAppender">
-        <logGroupName>ordenes-log-group</logGroupName>
+    <appender name="CLOUDWATCH" class="com.midterm.orders.config.CloudWatchLogAppender">
+        <logGroupName>orders-log-group</logGroupName>
         <region>us-east-1</region>
     </appender>
 
@@ -16,5 +16,5 @@
     </root>
 
     <logger name="org.springframework" level="WARN"/>
-    <logger name="com.parcial.ordenes" level="DEBUG"/>
+    <logger name="com.midterm.orders" level="DEBUG"/>
 </configuration>
