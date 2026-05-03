@@ -30,6 +30,11 @@ public class OrderController {
         try {
             log.info("POST /orders - userId: {}", order.getUserId());
             Order created = orderService.createOrder(order);
+            try {
+                kafkaTemplate.send("inventory_update_events", objectMapper.writeValueAsString(created));
+            } catch (Exception kafkaEx) {
+                log.error("Error sending to inventory_update_events", kafkaEx);
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (Exception e) {
             log.error("Error in POST /orders - sending to topic: {}", order, e);
@@ -69,7 +74,42 @@ public class OrderController {
         String status = body.get("status");
         log.info("PUT /orders/{}/status - status: {}", id, status);
         return orderService.updateOrderStatus(id, status)
-                .map(ResponseEntity::ok)
+                .map(updated -> {
+                    try {
+                        kafkaTemplate.send("order_status_changed_events", objectMapper.writeValueAsString(updated));
+                    } catch (Exception e) {
+                        log.error("Error sending to order_status_changed_events", e);
+                    }
+                    return ResponseEntity.ok(updated);
+                })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // PUT /orders/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable String id, @RequestBody Order order) {
+        log.info("PUT /orders/{} - updating entire order", id);
+        
+        // Before updating, get current to check if products changed
+        return orderService.getOrderById(id).flatMap(currentOrder -> {
+            boolean productsChanged = false;
+            // Simplified check: if items are provided, assume products changed
+            if (order.getItems() != null && !order.getItems().isEmpty()) {
+                productsChanged = true;
+            }
+            
+            final boolean finalProductsChanged = productsChanged;
+            
+            return orderService.updateOrder(id, order).map(updated -> {
+                if (finalProductsChanged) {
+                    try {
+                        kafkaTemplate.send("inventory_update_events", objectMapper.writeValueAsString(updated));
+                    } catch (Exception e) {
+                        log.error("Error sending to inventory_update_events", e);
+                    }
+                }
+                return ResponseEntity.ok(updated);
+            });
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

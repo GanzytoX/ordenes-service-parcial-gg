@@ -50,4 +50,24 @@ public class OrderService {
             return updated;
         });
     }
+
+    public Optional<Order> updateOrder(String id, Order updatedOrderData) {
+        return ordenRepository.findById(id).map(order -> {
+            order.setUserId(updatedOrderData.getUserId());
+            order.setItems(updatedOrderData.getItems());
+            order.setStatus(updatedOrderData.getStatus());
+            order.setUpdatedAt(LocalDateTime.now());
+            
+            if (order.getItems() != null) {
+                double total = order.getItems().stream()
+                        .mapToDouble(item -> item.getPrice() * item.getCantidad())
+                        .sum();
+                order.setTotal(total);
+            }
+            
+            Order updated = ordenRepository.save(order);
+            log.info("Order {} actualizada completamente", id);
+            return updated;
+        });
+    }
 }
